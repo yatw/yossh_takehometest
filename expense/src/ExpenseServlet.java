@@ -32,17 +32,17 @@ public class ExpenseServlet extends HttpServlet {
         response.setContentType("text/plain"); 
 
         
-        String date = request.getParameter("date");
-        float value = Float.parseFloat(request.getParameter("value")); 
-        String reason = request.getParameter("reason");
-        System.out.println(date);
-        System.out.println(value);
-        System.out.println(reason);
+        String input_date = request.getParameter("date");
+        float input_value = Float.parseFloat(request.getParameter("value")); 
+        String input_reason = request.getParameter("reason");
+        //System.out.println(input_date);
+        //System.out.println(input_value);
+        //System.out.println(input_reason);
         
         try {
         	
         	SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-            Date parsed = format.parse("20110210");
+            Date parsed = format.parse(input_date);
             java.sql.Date sqldate = new java.sql.Date(parsed.getTime());
         	
             // Get a connection from dataSource
@@ -51,14 +51,48 @@ public class ExpenseServlet extends HttpServlet {
             // Declare our statement
             Statement statement = dbcon.createStatement();
             
-            String query = "INSERT INTO expense (e_value, e_date, e_reason) VALUES (?,?,?);";
-            PreparedStatement preparedStmt = dbcon.prepareStatement(query);
-            preparedStmt.setFloat(1, value);
+            String insert_query = "INSERT INTO expense (e_value, e_date, e_reason) VALUES (?,?,?);";
+            PreparedStatement preparedStmt = dbcon.prepareStatement(insert_query);
+            preparedStmt.setFloat(1, input_value);
             preparedStmt.setDate(2, sqldate);
-            preparedStmt.setString(3, reason);
+            preparedStmt.setString(3, input_reason);
             preparedStmt.execute();
-            dbcon.close();
             System.out.println("statmentdone");
+            
+            
+            String select_query = "SELECT id, e_date, e_value, e_reason\r\n" + 
+            		"FROM expense;"; 
+            
+            ResultSet rs = statement.executeQuery(select_query);
+            JsonArray jsonArray = new JsonArray();
+            int count = 0;
+            while (rs.next()) {
+            	System.out.println(count++);
+            	String id = rs.getString("id");
+            	String e_date = rs.getString("e_date");
+            	String e_value = rs.getString("e_value");
+            	String e_reason = rs.getString("e_reason");
+            	
+            	System.out.println(e_reason);
+            	
+            	JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("id", id);
+                jsonObject.addProperty("e_date", e_date);
+                jsonObject.addProperty("e_value", e_value);
+                jsonObject.addProperty("e_reason", e_reason);
+                jsonArray.add(jsonObject);
+            }
+            
+            // write JSON string to output
+            out.write(jsonArray.toString());
+            // set response status to 200 (OK)
+            response.setStatus(200);
+            rs.close();
+            statement.close();
+        	System.out.println("done");
+
+            dbcon.close();
+
 
         } catch (Exception e) {
         	System.out.println(e);

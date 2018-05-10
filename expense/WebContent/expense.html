@@ -20,6 +20,7 @@
 
     <!-- Custom styles for this template -->
     <link href="css/expense-page.min.css" rel="stylesheet">
+    <link href="table-stylesheet.css" rel="stylesheet">
 
   </head>
 
@@ -46,7 +47,7 @@
               
 			  	        <li class="nav-item">
 							<div class="input-group">
-								<input class="form-control" type="text" placeholder="Enter date" name="date">
+								<input class="form-control" type="date"  name="date">
 							</div>
 						</li>
 						
@@ -80,6 +81,7 @@
     <table id=ExpenseTable class="expensetable" summary="csstable">
 		<tr>
     			<th scope="col">ExpenseID</th>
+    			<th scope="col">Date</th>
     			<th scope="col">Value</th>
     			<th scope="col">Reason</th>
     	</tr>

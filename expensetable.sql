@@ -10,4 +10,4 @@ CREATE TABLE expense(
     PRIMARY KEY (id)
 );
 
-
+SELECT id, e_date, e_value, e_reason FROM expense; 

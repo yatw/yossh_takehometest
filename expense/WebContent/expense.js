@@ -1,8 +1,35 @@
  
-function handleSearchResult(resultDataString) {
- 
-    resultDataJson = JSON.parse(resultDataString);
+function handleSearchResult(resultData) {
 
+	
+	console.log(resultData);
+	console.log(resultData.length);
+    let ExpenseTableElement = jQuery("#ExpenseTable");
+    
+    let rowHTML = "";
+    let count = 0;
+    for (count; count < resultData.length; count++) {
+    	
+    	
+		if (count%2 == 0) {
+			rowHTML+= "<tr class=\"normal\">";
+		}else {
+			rowHTML+= "<tr class=\"alt\">"; 
+		}
+		 
+		
+		//console.log(resultData[count]["movie_id"]);
+		rowHTML+="<td>" + resultData[count]["id"] + "</td>";	
+ 		rowHTML+="<td>" + resultData[count]["e_date"] + "</td>";
+ 		rowHTML+="<td>" + resultData[count]["e_value"] + "</td>";
+ 		rowHTML+="<td>" + resultData[count]["e_reason"] + "</td>";
+ 		rowHTML+="</tr>";
+	
+    }
+    
+    // Append the row created to the table body, which will refresh the page
+    ExpenseTableElement.append(rowHTML);
+    
 }
  
 function submitSearchForm(formSubmitEvent) {
@@ -11,7 +38,7 @@ function submitSearchForm(formSubmitEvent) {
     jQuery.get(
         "api/expense",
         jQuery("#expense_form").serialize(),
-        (resultDataString) => handleSearchResult(resultDataString));
+        (resultData) => handleSearchResult(resultData));
 }
 
 
