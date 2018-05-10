@@ -1,7 +1,7 @@
  
 function handleSearchResult(resultData) {
 
-	
+	resultData = JSON.parse(resultData);
 	console.log(resultData);
 	console.log(resultData.length);
     let ExpenseTableElement = jQuery("#ExpenseTable");
