@@ -2,12 +2,12 @@
 
 <Context>
 
-    <!-- Defines a Data Source Connecting to localhost moviedb-->
-    <Resource name="jdbc/moviedb"
+    <!-- Defines a Data Source Connecting to localhost expensedb-->
+    <Resource name="jdbc/expensedb"
               auth="Container"
               driverClassName="com.mysql.jdbc.Driver"
               type="javax.sql.DataSource"
               username="root"
               password="Sunny79682"
-              url="jdbc:mysql://localhost:3306/moviedb"/>
+              url="jdbc:mysql://localhost:3306/expensedb"/>
 </Context>
