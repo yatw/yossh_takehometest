@@ -38,13 +38,10 @@ public class ExpenseServlet extends HttpServlet {
         //System.out.println(input_date);
         //System.out.println(input_value);
         //System.out.println(input_reason);
-        
+        //System.out.println("----------------------------------------");
         try {
         	
-        	SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-            Date parsed = format.parse(input_date);
-            java.sql.Date sqldate = new java.sql.Date(parsed.getTime());
-        	
+ 
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
             System.out.println("connection success");
@@ -54,10 +51,10 @@ public class ExpenseServlet extends HttpServlet {
             String insert_query = "INSERT INTO expense (e_value, e_date, e_reason) VALUES (?,?,?);";
             PreparedStatement preparedStmt = dbcon.prepareStatement(insert_query);
             preparedStmt.setFloat(1, input_value);
-            preparedStmt.setDate(2, sqldate);
+            preparedStmt.setDate(2, java.sql.Date.valueOf(input_date));
             preparedStmt.setString(3, input_reason);
             preparedStmt.execute();
-            System.out.println("statmentdone");
+           
             
             
             String select_query = "SELECT id, e_date, e_value, e_reason\r\n" + 

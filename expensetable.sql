@@ -10,4 +10,7 @@ CREATE TABLE expense(
     PRIMARY KEY (id)
 );
 
-SELECT id, e_date, e_value, e_reason FROM expense; 
+
+INSERT INTO expense (e_value, e_date, e_reason) VALUES (12,'1000-01-01',12);
+
+SELECT * from expense;
