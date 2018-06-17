@@ -1,11 +1,9 @@
  
-function handleSearchResult(resultData) {
+function DisplayExpense(resultData) {
 
-	resultData = JSON.parse(resultData);
-	
-	
 	console.log(resultData);
 	console.log(resultData.length);
+	
     let ExpenseTableElement = jQuery("#ExpenseTable");
     
     let rowHTML = "";
@@ -33,18 +31,37 @@ function handleSearchResult(resultData) {
     ExpenseTableElement.append(rowHTML);
     
 }
- 
+
+function ShowExpense(){
+	
+	location.reload(); // clean up the table
+	
+	
+    jQuery.get(
+    	"api/displaytable",
+    	(resultData) => DisplayExpense(JSON.parse(resultData))); // for some reason insert return json as string
+	
+}
+
 function submitSearchForm(formSubmitEvent) {
     
     formSubmitEvent.preventDefault();
     jQuery.get(
-        "api/expense",
+        "api/insert",
         jQuery("#expense_form").serialize(),
-        (resultData) => handleSearchResult(resultData));
+       () => ShowExpense());
 }
 
 
-
+// bind the button click to this handler function
 jQuery("#expense_form").submit((event) => submitSearchForm(event));
+
+//Makes the HTTP GET request and registers on success callback function handleResult
+jQuery.ajax({
+    dataType: "json",  // Setting return data type
+    method: "GET",// Setting request method
+    url: "api/displaytable" ,
+    success: (resultData) => DisplayExpense(resultData)   // display all expense when fired up
+});
 
  

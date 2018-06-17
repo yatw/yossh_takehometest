@@ -10,7 +10,9 @@ CREATE TABLE expense(
     PRIMARY KEY (id)
 );
 
+INSERT INTO expense (e_value, e_date, e_reason) VALUES (12,'2008-6-5',32);
+INSERT INTO expense (e_value, e_date, e_reason) VALUES (12,'2002-3-1',32);
+INSERT INTO expense (e_value, e_date, e_reason) VALUES (21,'2005-6-7',21);
 
-INSERT INTO expense (e_value, e_date, e_reason) VALUES (12,'1000-01-01',12);
-
-SELECT * from expense;
+SELECT * FROM expense
+ORDER BY id DESC;
