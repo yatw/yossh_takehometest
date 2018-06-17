@@ -19,6 +19,20 @@ import java.sql.*;
 @WebServlet(name = "InsertServlet", urlPatterns = "/api/insert")
 public class InsertServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    
+
+    private double checkvalidvalue(String input) {
+    	
+    	
+    	double value = -1;
+    	try {
+    		  value = Double.parseDouble(input);    		  	        		  
+    		} catch (Exception e) {
+    		  System.out.println(e); 
+    	}
+    	
+    	return value;
+    }
  
     @Resource(name = "jdbc/expensedb")
     private DataSource dataSource;
@@ -30,8 +44,21 @@ public class InsertServlet extends HttpServlet {
 
         
         String input_date = request.getParameter("date");
-        float input_value = Float.parseFloat(request.getParameter("value")); 
+        double input_value = checkvalidvalue(request.getParameter("value"));
         String input_reason = request.getParameter("reason");
+        
+        
+        
+        JsonObject jsonObject = new JsonObject();
+        if (input_date.isEmpty() || input_value < 0 || input_reason.isEmpty()) {
+        	jsonObject.addProperty("valid", "invalid");
+        	out.write(jsonObject.toString());
+        	return;
+        }else {
+			jsonObject.addProperty("valid", "valid");
+			out.write(jsonObject.toString());
+        }
+                
         //System.out.println(input_date);
         //System.out.println(input_value);
         //System.out.println(input_reason);
@@ -47,7 +74,7 @@ public class InsertServlet extends HttpServlet {
           
             String insert_query = "INSERT INTO expense (e_value, e_date, e_reason) VALUES (?,?,?);";
             PreparedStatement preparedStmt = dbcon.prepareStatement(insert_query);
-            preparedStmt.setFloat(1, input_value);
+            preparedStmt.setDouble(1, input_value);
             preparedStmt.setDate(2, java.sql.Date.valueOf(input_date));
             preparedStmt.setString(3, input_reason);
             preparedStmt.execute();
@@ -58,9 +85,9 @@ public class InsertServlet extends HttpServlet {
         } catch (Exception e) {
         	System.out.println(e);
 			// write error message JSON object to output
-			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("errorMessage", e.getMessage());
-			out.write(jsonObject.toString());
+			JsonObject errorobject = new JsonObject();
+			errorobject.addProperty("errorMessage", e.getMessage());
+			out.write(errorobject.toString());
 
 			// set reponse status to 500 (Internal Server Error)
 			response.setStatus(500);

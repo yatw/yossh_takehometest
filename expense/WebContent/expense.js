@@ -32,15 +32,23 @@ function DisplayExpense(resultData) {
     
 }
 
-function ShowExpense(){
+function ShowExpense(errorData){
 	
-	location.reload(); // clean up the table
+	errorData = JSON.parse(errorData);
+	// resultData is error message
+	console.log(errorData);
 	
+	let valid = errorData["valid"];
 	
-    jQuery.get(
-    	"api/displaytable",
-    	(resultData) => DisplayExpense(JSON.parse(resultData))); // for some reason insert return json as string
-	
+	if (valid == "valid"){
+
+		location.reload(); // clean up the table
+	    jQuery.get(
+	    	"api/displaytable",
+	    	(resultData) => DisplayExpense(JSON.parse(resultData))); // for some reason insert return json as string
+	}else{
+		document.getElementById("insert_expense_error").innerHTML = "Please enter a valid expense";
+	}
 }
 
 function submitSearchForm(formSubmitEvent) {
@@ -49,7 +57,7 @@ function submitSearchForm(formSubmitEvent) {
     jQuery.get(
         "api/insert",
         jQuery("#expense_form").serialize(),
-       () => ShowExpense());
+       (errorData) => ShowExpense(errorData));
 }
 
 
