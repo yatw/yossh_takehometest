@@ -17,7 +17,6 @@ function DisplayExpense(resultData) {
 			rowHTML+= "<tr class=\"alt\">"; 
 		}
 		 
-		
 		//console.log(resultData[count]["movie_id"]);
 		rowHTML+="<td>" + resultData[count]["id"] + "</td>";	
  		rowHTML+="<td>" + resultData[count]["e_date"] + "</td>";
@@ -32,24 +31,34 @@ function DisplayExpense(resultData) {
     
 }
 
+function showsnackbar() {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+
+    // Add the "show" class to DIV
+    x.className = "show";
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+} 
+
 function ShowExpense(errorData){
 	
 	errorData = JSON.parse(errorData);
-	// resultData is error message
+	// errorData is error message
 	console.log(errorData);
 	
 	let valid = errorData["valid"];
 	
 	if (valid == "valid"){
-
-		location.reload(); // clean up the table
-	    jQuery.get(
-	    	"api/displaytable",
-	    	(resultData) => DisplayExpense(JSON.parse(resultData))); // for some reason insert return json as string
+		showsnackbar();
+		location.reload(); // the display function will refresh	    
 	}else{
 		document.getElementById("insert_expense_error").innerHTML = "Please enter a valid expense";
 	}
 }
+
+
 
 function submitSearchForm(formSubmitEvent) {
     
